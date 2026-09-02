@@ -12,4 +12,7 @@ class AdopterController
 
     // Future action: submit_application for a selected cat.
     // Future action: withdraw_application for pending applications only.
+
+    // Future action: submit_intake for a new cat intake request.
+    // Future action: cancel_intake for pending intake requests only.
 }

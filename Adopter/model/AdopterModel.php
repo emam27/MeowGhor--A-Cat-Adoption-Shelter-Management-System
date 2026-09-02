@@ -12,4 +12,8 @@ class AdopterModel
     // Future operation: create an adoption application.
     // Future operation: get the adopter's applications.
     // Future operation: withdraw a pending adoption application.
+
+    // Future operation: create an intake request.
+    // Future operation: get the adopter's intake requests.
+    // Future operation: cancel a pending intake request.
 }
