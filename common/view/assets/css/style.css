@@ -182,3 +182,72 @@ body {
         padding: 24px 20px;
     }
 }
+.profile-menu {
+    position: relative;
+    display: inline-block;
+    font-family: Arial, sans-serif;
+}
+
+.profile-menu summary {
+    list-style: none;
+}
+
+.profile-menu summary::-webkit-details-marker {
+    display: none;
+}
+
+.profile-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 1px solid #e77d45;
+    border-radius: 50%;
+    background: #fff;
+    color: #e77d45;
+    cursor: pointer;
+}
+
+.profile-toggle:hover {
+    background: #fff5ef;
+}
+
+.profile-icon {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.profile-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    z-index: 1000;
+    min-width: 140px;
+    padding: 6px;
+    border: 1px solid #e5e5e5;
+    border-radius: 6px;
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.profile-dropdown a {
+    display: block;
+    padding: 8px 10px;
+    border-radius: 4px;
+    color: #333;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.profile-dropdown a:hover {
+    background: #fff5ef;
+    color: #e77d45;
+}
