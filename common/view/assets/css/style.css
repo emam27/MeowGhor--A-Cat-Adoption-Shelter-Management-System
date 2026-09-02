@@ -676,3 +676,135 @@ body {
         row-gap: 10px;
     }
 }
+.intakes-page-main {
+    padding-top: 38px;
+}
+
+.intakes-page-intro h1 {
+    margin: 0 0 8px;
+    color: #444;
+    font-size: 28px;
+}
+
+.intakes-page-intro p {
+    margin: 0;
+    color: #666;
+    font-size: 15px;
+}
+
+.intake-form-card,
+.intake-requests-section {
+    margin-top: 28px;
+    padding: 22px;
+    border: 1px solid #eeeeee;
+    border-radius: 7px;
+    background: #ffffff;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+}
+
+.intake-form-card h2,
+.intake-requests-section h2 {
+    margin: 0 0 18px;
+    color: #444;
+    font-size: 19px;
+}
+
+.intake-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.intake-form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.intake-form-field-wide {
+    grid-column: 1 / -1;
+}
+
+.intake-form-field label {
+    color: #444;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.intake-form-field input,
+.intake-form-field select,
+.intake-form-field textarea {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 9px 10px;
+    border: 1px solid #dcdcdc;
+    border-radius: 5px;
+    background: #ffffff;
+    color: #333;
+    font: inherit;
+    font-size: 14px;
+}
+
+.intake-form-field textarea {
+    resize: vertical;
+}
+
+.intake-submit-button {
+    margin-top: 18px;
+    padding: 9px 15px;
+    border: 1px solid #e77d45;
+    border-radius: 5px;
+    background: #e77d45;
+    color: #ffffff;
+    cursor: pointer;
+    font: inherit;
+    font-size: 14px;
+}
+
+.intake-submit-button:hover {
+    background: #d96d38;
+}
+
+.intake-requests-section {
+    margin-top: 24px;
+}
+
+.intake-empty-state {
+    padding: 26px 20px;
+    border: 1px solid #eeeeee;
+    border-radius: 6px;
+    background: #fffaf5;
+    text-align: center;
+}
+
+.intake-empty-state p {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.intake-request-list-header {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr 1fr;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #eeeeee;
+    color: #444;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+@media (max-width: 560px) {
+    .intake-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .intake-form-field-wide {
+        grid-column: auto;
+    }
+
+    .intake-request-list-header {
+        grid-template-columns: 1fr 1fr;
+        row-gap: 10px;
+    }
+}
