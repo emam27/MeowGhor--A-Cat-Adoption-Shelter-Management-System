@@ -5,12 +5,6 @@ require_once __DIR__ . "/../../common/controller/AuthGuard.php";
 
 requireRole("adopter");
 
-/**
- * Shared controller for future Adopter actions, including Browse Cats.
- *
- * Browse Cats validation and filtering will be added here when MySQL is
- * connected. No database results are returned during the development phase.
- */
 class AdopterController
 {
     private $adopterModel;
@@ -20,9 +14,34 @@ class AdopterController
         $this->adopterModel = new AdopterModel();
     }
 
+    public function getCats($filters)
+    {
+        return $this->adopterModel->getAvailableCats($filters);
+    }
+
+    public function getCat($catId)
+    {
+        return $this->adopterModel->getCatById($catId);
+    }
+
+    public function getAvailableCat($catId)
+    {
+        return $this->adopterModel->getAvailableCatById($catId);
+    }
+
     public function getIntakeRequests($userId)
     {
         return $this->adopterModel->getIntakeRequestsByUser($userId);
+    }
+
+    public function getApplications($userId)
+    {
+        return $this->adopterModel->getApplicationsByUser($userId);
+    }
+
+    public function getDashboardCounts($userId)
+    {
+        return $this->adopterModel->getDashboardCounts($userId);
     }
 
     public function submitIntake($userId, $post, $files)
@@ -35,51 +54,25 @@ class AdopterController
         $description = trim($post["description"] ?? "");
         $reason = trim($post["reason_for_intake"] ?? "");
 
-        if ($catName === "") {
-            $this->redirectWithError("Cat name is required.");
+        if ($catName === "" || $breed === "" || $healthStatus === "" || $description === "" || $reason === "") {
+            $this->redirectIntakeError("Please complete all required intake fields.");
         }
-
         if (!in_array($gender, ["Male", "Female"], true)) {
-            $this->redirectWithError("Please select a valid gender.");
+            $this->redirectIntakeError("Please select a valid gender.");
         }
-
         if ($ageText !== "" && (!is_numeric($ageText) || (float) $ageText < 0)) {
-            $this->redirectWithError("Age must be a number greater than or equal to 0.");
+            $this->redirectIntakeError("Age must be a non-negative number.");
         }
 
-        if ($breed === "" || $healthStatus === "" || $description === "") {
-            $this->redirectWithError("Please complete the cat details.");
-        }
-
-        if ($reason === "") {
-            $this->redirectWithError("Reason for intake is required.");
+        $imageUpload = $this->handleImageUpload($files["cat_image"] ?? null);
+        if ($imageUpload["error"] !== null) {
+            $this->redirectIntakeError($imageUpload["error"]);
         }
 
         $age = $ageText === "" ? null : (float) $ageText;
-        $imageUpload = $this->handleImageUpload($files["cat_image"] ?? null);
-
-        if ($imageUpload["error"] !== null) {
-            $this->redirectWithError($imageUpload["error"]);
-        }
-
-        $created = $this->adopterModel->createIntakeRequest(
-            $userId,
-            $catName,
-            $breed,
-            $gender,
-            $age,
-            $healthStatus,
-            $description,
-            $reason,
-            $imageUpload["path"]
-        );
-
-        if (!$created) {
-            if ($imageUpload["full_path"] !== null && is_file($imageUpload["full_path"])) {
-                unlink($imageUpload["full_path"]);
-            }
-
-            $this->redirectWithError("The intake request could not be submitted.");
+        if (!$this->adopterModel->createIntakeRequest($userId, $catName, $breed, $gender, $age, $healthStatus, $description, $reason, $imageUpload["path"])) {
+            $this->removeUploadedFile($imageUpload["full_path"]);
+            $this->redirectIntakeError("The intake request could not be submitted.");
         }
 
         $_SESSION["auth_message"] = "Intake request submitted successfully.";
@@ -89,21 +82,62 @@ class AdopterController
 
     public function cancelIntake($userId, $post)
     {
-        $requestId = (int) ($post["request_id"] ?? 0);
-
-        if ($requestId <= 0 || !$this->adopterModel->cancelPendingIntakeRequest($requestId, $userId)) {
-            $this->redirectWithError("Only your pending intake requests can be cancelled.");
+        $requestId = filter_var($post["request_id"] ?? null, FILTER_VALIDATE_INT);
+        if (!$requestId || !$this->adopterModel->cancelPendingIntakeRequest($requestId, $userId)) {
+            $this->redirectIntakeError("Only your pending intake requests can be cancelled.");
         }
-
         $_SESSION["auth_message"] = "Intake request cancelled.";
         header("Location: /MeowGhor/Adopter/view/intakes.php");
         exit();
     }
 
-    private function redirectWithError($message)
+    public function submitApplication($userId, $post)
+    {
+        $catId = filter_var($post["cat_id"] ?? null, FILTER_VALIDATE_INT);
+        $reason = trim($post["reason"] ?? "");
+        $livingSituation = trim($post["living_situation"] ?? "");
+        $returnUrl = "/MeowGhor/Adopter/view/applications.php" . ($catId ? "?cat_id=" . $catId : "");
+
+        if (!$catId || $reason === "" || $livingSituation === "") {
+            $this->redirectApplicationError("Please complete all application fields.", $returnUrl);
+        }
+        if ($this->adopterModel->getAvailableCatById($catId) === null) {
+            $this->redirectApplicationError("That cat is no longer available for adoption.", "/MeowGhor/Adopter/view/cats.php");
+        }
+        if ($this->adopterModel->hasPendingApplication($userId, $catId)) {
+            $this->redirectApplicationError("You already have a pending application for this cat.", $returnUrl);
+        }
+        if (!$this->adopterModel->createApplication($userId, $catId, $reason, $livingSituation)) {
+            $this->redirectApplicationError("The adoption application could not be submitted.", $returnUrl);
+        }
+
+        $_SESSION["auth_message"] = "Adoption application submitted successfully.";
+        header("Location: /MeowGhor/Adopter/view/applications.php");
+        exit();
+    }
+
+    public function withdrawApplication($userId, $post)
+    {
+        $applicationId = filter_var($post["application_id"] ?? null, FILTER_VALIDATE_INT);
+        if (!$applicationId || !$this->adopterModel->withdrawPendingApplication($applicationId, $userId)) {
+            $this->redirectApplicationError("Only your pending applications can be withdrawn.", "/MeowGhor/Adopter/view/applications.php");
+        }
+        $_SESSION["auth_message"] = "Adoption application withdrawn.";
+        header("Location: /MeowGhor/Adopter/view/applications.php");
+        exit();
+    }
+
+    private function redirectIntakeError($message)
     {
         $_SESSION["auth_error"] = $message;
         header("Location: /MeowGhor/Adopter/view/intakes.php");
+        exit();
+    }
+
+    private function redirectApplicationError($message, $url)
+    {
+        $_SESSION["auth_error"] = $message;
+        header("Location: " . $url);
         exit();
     }
 
@@ -112,67 +146,50 @@ class AdopterController
         if ($file === null || ($file["error"] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) {
             return ["path" => null, "full_path" => null, "error" => null];
         }
-
         if (($file["error"] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
             return ["path" => null, "full_path" => null, "error" => "The cat image could not be uploaded."];
         }
 
         $extension = strtolower(pathinfo($file["name"] ?? "", PATHINFO_EXTENSION));
         $allowedExtensions = ["jpg", "jpeg", "png", "webp"];
-
-        if (!in_array($extension, $allowedExtensions, true)) {
-            return ["path" => null, "full_path" => null, "error" => "Only JPG, JPEG, PNG, and WEBP images are allowed."];
-        }
-
         $imageInfo = @getimagesize($file["tmp_name"]);
         $allowedMimeTypes = ["image/jpeg", "image/png", "image/webp"];
-
-        if ($imageInfo === false || !in_array($imageInfo["mime"], $allowedMimeTypes, true)) {
-            return ["path" => null, "full_path" => null, "error" => "Please upload a valid cat image."];
+        if (!in_array($extension, $allowedExtensions, true) || $imageInfo === false || !in_array($imageInfo["mime"], $allowedMimeTypes, true)) {
+            return ["path" => null, "full_path" => null, "error" => "Only valid JPG, JPEG, PNG, and WEBP images are allowed."];
         }
 
         $uploadDirectory = __DIR__ . "/../../uploads/cats/";
-
         if (!is_dir($uploadDirectory) && !mkdir($uploadDirectory, 0755, true)) {
             return ["path" => null, "full_path" => null, "error" => "The image upload folder could not be created."];
         }
-
         $filename = bin2hex(random_bytes(16)) . "." . $extension;
         $targetPath = $uploadDirectory . $filename;
-
         if (!move_uploaded_file($file["tmp_name"], $targetPath)) {
             return ["path" => null, "full_path" => null, "error" => "The cat image could not be saved."];
         }
-
-        return [
-            "path" => "uploads/cats/" . $filename,
-            "full_path" => $targetPath,
-            "error" => null
-        ];
+        return ["path" => "uploads/cats/" . $filename, "full_path" => $targetPath, "error" => null];
     }
 
-    // Future action: submit_application for a selected cat.
-    // Future action: withdraw_application for pending applications only.
-
-    // Future action: submit_intake for a new cat intake request.
-    // Future action: cancel_intake for pending intake requests only.
-
-    // Future action: view_cat_details after receiving and validating cat_id.
+    private function removeUploadedFile($path)
+    {
+        if ($path !== null && is_file($path)) {
+            unlink($path);
+        }
+    }
 }
 
-$adopterController = new AdopterController();
-
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $adopterController = new AdopterController();
     $action = $_POST["action"] ?? "";
-
     if ($action === "submit_intake") {
-        $adopterController->submitIntake($_SESSION["user_id"], $_POST, $_FILES);
+        $adopterController->submitIntake((int) $_SESSION["user_id"], $_POST, $_FILES);
+    } elseif ($action === "cancel_intake") {
+        $adopterController->cancelIntake((int) $_SESSION["user_id"], $_POST);
+    } elseif ($action === "submit_application") {
+        $adopterController->submitApplication((int) $_SESSION["user_id"], $_POST);
+    } elseif ($action === "withdraw_application") {
+        $adopterController->withdrawApplication((int) $_SESSION["user_id"], $_POST);
     }
-
-    if ($action === "cancel_intake") {
-        $adopterController->cancelIntake($_SESSION["user_id"], $_POST);
-    }
-
-    header("Location: /MeowGhor/Adopter/view/intakes.php");
+    header("Location: /MeowGhor/Adopter/view/dashboard.php");
     exit();
 }
