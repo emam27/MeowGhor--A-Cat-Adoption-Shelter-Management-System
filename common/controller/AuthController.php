@@ -2,12 +2,19 @@
 
 session_start();
 
-if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+$action = $_POST["action"] ?? $_GET["action"] ?? "";
+
+if ($action === "logout") {
+    session_unset();
+    session_destroy();
     header("Location: ../view/login.php");
     exit();
 }
 
-$action = $_POST["action"] ?? "";
+if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+    header("Location: ../view/login.php");
+    exit();
+}
 
 if ($action === "login") {
     $email = trim($_POST["email"] ?? "");
@@ -27,10 +34,13 @@ if ($action === "login") {
         exit();
     }
 
-    // TEMPORARY: This only confirms form validation. No authentication occurs yet.
-    $_SESSION["auth_message"] = "Login form is valid. Database authentication will be added next.";
+    // DEVELOPMENT ONLY:
+    // Database authentication is not connected yet.
+    // Valid login form input temporarily redirects to the Adopter dashboard.
+    // Replace this with database lookup, password_verify(), user_type checking,
+    // and role-based dashboard redirect when MySQL is integrated.
     unset($_SESSION["auth_old"]);
-    header("Location: ../view/login.php");
+    header("Location: ../../Adopter/view/dashboard.php");
     exit();
 }
 
@@ -78,7 +88,7 @@ if ($action === "register") {
     // TEMPORARY: This only confirms form validation. No account is created yet.
     $_SESSION["auth_message"] = "Registration form is valid. Database registration will be added next.";
     unset($_SESSION["auth_old"]);
-    header("Location: ../view/register.php");
+    header("Location: ../view/login.php");
     exit();
 }
 
