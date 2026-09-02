@@ -1,3 +1,7 @@
+<?php
+require_once __DIR__ . '/../../common/controller/AuthGuard.php';
+requireRole("adopter");
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
