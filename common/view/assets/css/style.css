@@ -808,3 +808,148 @@ body {
         row-gap: 10px;
     }
 }
+.cat-reset-button {
+    display: inline-block;
+    padding: 9px 15px;
+    border: 1px solid #dcdcdc;
+    border-radius: 5px;
+    background: #ffffff;
+    color: #555;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.cat-reset-button:hover {
+    border-color: #e77d45;
+    color: #e77d45;
+}
+
+.cat-details-page-main {
+    padding-top: 38px;
+}
+
+.cat-details-empty-state,
+.cat-details-card {
+    border: 1px solid #eeeeee;
+    border-radius: 7px;
+    background: #ffffff;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+}
+
+.cat-details-empty-state {
+    padding: 38px 22px;
+    text-align: center;
+}
+
+.cat-details-empty-state h1 {
+    margin: 0 0 8px;
+    color: #444;
+    font-size: 24px;
+}
+
+.cat-details-empty-state p {
+    margin: 0 0 20px;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.cat-back-button,
+.cat-details-apply-button {
+    display: inline-block;
+    padding: 9px 15px;
+    border: 1px solid #e77d45;
+    border-radius: 5px;
+    background: #e77d45;
+    color: #ffffff;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.cat-back-button:hover,
+.cat-details-apply-button:hover {
+    background: #d96d38;
+}
+
+.cat-details-card {
+    display: grid;
+    grid-template-columns: minmax(220px, 0.8fr) minmax(0, 1.2fr);
+    gap: 24px;
+    padding: 22px;
+}
+
+.cat-details-image-wrap {
+    min-height: 260px;
+    border-radius: 6px;
+    background: #fff8ef;
+}
+
+.cat-details-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 260px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.cat-details-content h1 {
+    margin: 0 0 6px;
+    color: #444;
+    font-size: 26px;
+}
+
+.cat-details-breed {
+    margin: 0 0 20px;
+    color: #666;
+    font-size: 15px;
+}
+
+.cat-details-facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin: 0;
+}
+
+.cat-details-facts dt {
+    margin-bottom: 4px;
+    color: #666;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.cat-details-facts dd {
+    margin: 0;
+    color: #333;
+    font-size: 14px;
+}
+
+.cat-details-description {
+    margin-top: 22px;
+}
+
+.cat-details-description h2 {
+    margin: 0 0 8px;
+    color: #444;
+    font-size: 17px;
+}
+
+.cat-details-description-text {
+    margin: 0 0 20px;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+@media (max-width: 700px) {
+    .cat-details-card {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 560px) {
+    .cat-details-facts {
+        grid-template-columns: 1fr;
+    }
+}
