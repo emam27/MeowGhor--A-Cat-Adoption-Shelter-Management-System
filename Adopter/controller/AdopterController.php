@@ -15,4 +15,6 @@ class AdopterController
 
     // Future action: submit_intake for a new cat intake request.
     // Future action: cancel_intake for pending intake requests only.
+
+    // Future action: view_cat_details after receiving and validating cat_id.
 }

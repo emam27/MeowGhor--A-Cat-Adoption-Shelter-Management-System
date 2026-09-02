@@ -16,4 +16,6 @@ class AdopterModel
     // Future operation: create an intake request.
     // Future operation: get the adopter's intake requests.
     // Future operation: cancel a pending intake request.
+
+    // Future operation: get a cat by ID.
 }

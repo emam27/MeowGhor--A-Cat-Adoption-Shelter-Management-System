@@ -53,6 +53,7 @@
             </div>
 
             <button class="cat-filter-button" type="submit">Apply Filters</button>
+            <a class="cat-reset-button" href="cats.php">Reset</a>
         </form>
 
         <section class="cat-listings" aria-label="Cat listings">
