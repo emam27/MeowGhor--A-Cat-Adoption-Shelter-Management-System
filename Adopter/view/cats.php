@@ -28,7 +28,7 @@
         <!-- Filtering will be connected through AdopterController and AdopterModel when MySQL is added. -->
         <form class="cat-filters" action="cats.php" method="get">
             <div class="cat-filter-field">
-                <label for="cat-search">Search by cat name or breed:</label>
+                <label for="cat-search">Search</label>
                 <input type="search" id="cat-search" name="search" placeholder="Cat name or breed">
             </div>
 
