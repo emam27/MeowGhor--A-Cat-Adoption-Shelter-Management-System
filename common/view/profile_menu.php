@@ -1,7 +1,5 @@
 <?php
-/**
- * Shared role-independent profile menu for adopter and shelter staff navbars.
- */
+/** Shared role-independent profile menu. */
 ?>
 <details class="profile-menu">
     <summary class="profile-toggle" aria-label="Open profile menu" title="Profile">
@@ -10,11 +8,8 @@
             <path d="M5.5 20c.7-3.3 3-5 6.5-5s5.8 1.7 6.5 5"></path>
         </svg>
     </summary>
-
     <div class="profile-dropdown">
-        <!-- Update this project-relative URL if the future profile page uses different routing. -->
-        <a href="common/view/profile.php">My Profile</a>
-
-        <a href="../../common/controller/AuthController.php?action=logout">Logout</a>
+        <a href="/MeowGhor/common/view/profile.php">My Profile</a>
+        <a href="/MeowGhor/common/controller/AuthController.php?action=logout">Logout</a>
     </div>
 </details>
