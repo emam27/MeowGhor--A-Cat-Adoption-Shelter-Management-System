@@ -9,4 +9,7 @@
 class AdopterController
 {
     // Future Adopter actions will be handled here.
+
+    // Future action: submit_application for a selected cat.
+    // Future action: withdraw_application for pending applications only.
 }
