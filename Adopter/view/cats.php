@@ -28,14 +28,27 @@
         <!-- Filtering will be connected through AdopterController and AdopterModel when MySQL is added. -->
         <form class="cat-filters" action="cats.php" method="get">
             <div class="cat-filter-field">
-                <label for="cat-search">Search:</label>
-                <input type="search" id="cat-search" name="search">
+                <label for="cat-search">Search by cat name or breed:</label>
+                <input type="search" id="cat-search" name="search" placeholder="Cat name or breed">
             </div>
 
             <div class="cat-filter-field">
                 <label for="cat-gender">Gender:</label>
                 <select id="cat-gender" name="gender">
                     <option value="">All</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+            </div>
+
+            <div class="cat-filter-field">
+                <label for="cat-age">Age:</label>
+                <select id="cat-age" name="age">
+                    <option value="">All Ages</option>
+                    <option value="kitten">Kitten</option>
+                    <option value="young">Young</option>
+                    <option value="adult">Adult</option>
+                    <option value="senior">Senior</option>
                 </select>
             </div>
 
