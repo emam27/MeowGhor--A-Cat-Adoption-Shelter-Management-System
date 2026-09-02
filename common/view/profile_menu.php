@@ -15,7 +15,6 @@
         <!-- Update this project-relative URL if the future profile page uses different routing. -->
         <a href="common/view/profile.php">My Profile</a>
 
-        <!-- TODO: Connect this link to the shared authentication logout logic. -->
-        <a href="#">Logout</a>
+        <a href="../../common/controller/AuthController.php?action=logout">Logout</a>
     </div>
 </details>
