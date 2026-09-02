@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . "/../model/AuthModel.php";
+
 session_start();
 
 $action = $_POST["action"] ?? $_GET["action"] ?? "";
@@ -10,6 +12,8 @@ if ($action === "logout") {
     header("Location: ../view/login.php");
     exit();
 }
+
+$authModel = new AuthModel();
 
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     header("Location: ../view/login.php");
@@ -34,13 +38,31 @@ if ($action === "login") {
         exit();
     }
 
-    // DEVELOPMENT ONLY:
-    // Database authentication is not connected yet.
-    // Valid login form input temporarily redirects to the Adopter dashboard.
-    // Replace this with database lookup, password_verify(), user_type checking,
-    // and role-based dashboard redirect when MySQL is integrated.
-    unset($_SESSION["auth_old"]);
-    header("Location: ../../Adopter/view/dashboard.php");
+    $user = $authModel->findUserByEmail($email);
+
+    if ($user === null || !password_verify($password, $user["password"])) {
+        $_SESSION["auth_error"] = "Invalid email or password.";
+        $_SESSION["auth_old"] = ["email" => $email];
+        header("Location: ../view/login.php");
+        exit();
+    }
+
+    if ($user["user_type"] === "adopter") {
+        $_SESSION["user_id"] = $user["user_id"];
+        $_SESSION["name"] = $user["name"];
+        $_SESSION["email"] = $user["email"];
+        $_SESSION["user_type"] = $user["user_type"];
+
+        unset($_SESSION["auth_old"]);
+        header("Location: /MeowGhor/Adopter/view/dashboard.php");
+        exit();
+    }
+
+    // NEXT INTEGRATION STEP: Add the verified Shelter Staff dashboard route.
+    // Do not add a Staff account or invent a Staff dashboard in this flow.
+    $_SESSION["auth_error"] = "Invalid email or password.";
+    $_SESSION["auth_old"] = ["email" => $email];
+    header("Location: ../view/login.php");
     exit();
 }
 
@@ -83,10 +105,22 @@ if ($action === "register") {
         exit();
     }
 
-    // During database integration, public registration will create
-    // user_type = 'community_user'.
-    // TEMPORARY: This only confirms form validation. No account is created yet.
-    $_SESSION["auth_message"] = "Registration form is valid. Database registration will be added next.";
+    if ($authModel->emailExists($email)) {
+        $_SESSION["auth_error"] = "An account with this email already exists.";
+        header("Location: ../view/register.php");
+        exit();
+    }
+
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    $created = $authModel->createAdopter($name, $email, $hashedPassword, $phone, $address);
+
+    if (!$created) {
+        $_SESSION["auth_error"] = "Registration failed. Please try again.";
+        header("Location: ../view/register.php");
+        exit();
+    }
+
+    $_SESSION["auth_message"] = "Registration successful. Please login.";
     unset($_SESSION["auth_old"]);
     header("Location: ../view/login.php");
     exit();
