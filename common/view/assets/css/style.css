@@ -953,3 +953,82 @@ body {
         grid-template-columns: 1fr;
     }
 }
+.intake-feedback {
+    margin-bottom: 18px;
+    padding: 11px 14px;
+    border: 1px solid #eeeeee;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.intake-feedback-error {
+    background: #fff2f0;
+    color: #9a3d32;
+}
+
+.intake-feedback-success {
+    background: #f1f8f3;
+    color: #4f7d68;
+}
+
+.intake-request-list {
+    overflow: hidden;
+    border: 1px solid #eeeeee;
+    border-radius: 6px;
+}
+
+.intake-request-row {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr 1fr;
+    gap: 12px;
+    align-items: center;
+    padding: 13px 12px;
+    border-bottom: 1px solid #eeeeee;
+    color: #333;
+    font-size: 14px;
+}
+
+.intake-request-row:last-child {
+    border-bottom: 0;
+}
+
+.intake-request-cell {
+    min-width: 0;
+}
+
+.intake-request-status {
+    color: #e77d45;
+    font-weight: bold;
+}
+
+.intake-cancel-form {
+    margin: 0;
+}
+
+.intake-cancel-button {
+    padding: 6px 10px;
+    border: 1px solid #e77d45;
+    border-radius: 4px;
+    background: #ffffff;
+    color: #e77d45;
+    cursor: pointer;
+    font: inherit;
+    font-size: 13px;
+}
+
+.intake-cancel-button:hover {
+    background: #fff5ef;
+}
+
+.intake-no-action {
+    color: #999;
+}
+
+.intake-staff-comment {
+    grid-column: 1 / -1;
+    padding-top: 9px;
+    border-top: 1px solid #f1f1f1;
+    color: #666;
+    font-size: 13px;
+    line-height: 1.5;
+}
