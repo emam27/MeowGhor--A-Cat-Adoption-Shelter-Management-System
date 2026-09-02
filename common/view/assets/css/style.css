@@ -251,3 +251,134 @@ body {
     background: #fff5ef;
     color: #e77d45;
 }
+.adopter-dashboard {
+    min-height: 100vh;
+    margin: 0;
+    background: #fff8ef;
+    color: #333;
+    font-family: Arial, sans-serif;
+}
+
+.adopter-navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 14px 28px;
+    border-bottom: 1px solid #eeeeee;
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.adopter-brand {
+    color: #e77d45;
+    font-size: 18px;
+    font-weight: bold;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.adopter-nav-links {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 18px;
+    flex-wrap: wrap;
+}
+
+.adopter-nav-links > a {
+    color: #333;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.adopter-nav-links > a:hover {
+    color: #e77d45;
+}
+
+.adopter-dashboard-main {
+    width: min(100% - 40px, 1080px);
+    margin: 0 auto;
+    padding: 42px 0 56px;
+}
+
+.adopter-dashboard-intro h1 {
+    margin: 0 0 8px;
+    color: #444;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.adopter-dashboard-intro p {
+    margin: 0;
+    color: #666;
+    font-size: 15px;
+}
+
+.adopter-summary-cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    margin-top: 30px;
+}
+
+.adopter-summary-card,
+.adopter-recent-activity {
+    border: 1px solid #eeeeee;
+    border-radius: 7px;
+    background: #ffffff;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+}
+
+.adopter-summary-card {
+    padding: 20px;
+}
+
+.adopter-summary-card h2 {
+    margin: 0 0 16px;
+    color: #444;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.adopter-summary-card p {
+    margin: 0;
+    color: #e77d45;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.adopter-recent-activity {
+    margin-top: 24px;
+    padding: 22px;
+}
+
+.adopter-recent-activity h2 {
+    margin: 0 0 14px;
+    color: #444;
+    font-size: 19px;
+}
+
+.adopter-recent-activity p {
+    margin: 6px 0 0;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+@media (max-width: 760px) {
+    .adopter-navbar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .adopter-nav-links {
+        justify-content: flex-start;
+        gap: 12px 16px;
+        width: 100%;
+    }
+
+    .adopter-summary-cards {
+        grid-template-columns: 1fr;
+    }
+}
